@@ -6,23 +6,54 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/app/web/staticfiles
     expose:
-      - 8000
+      - "8000"
     env_file:
       - ./.env.prod
     depends_on:
       - db
-  db:
-    image: postgres:latest
-    volumes:
-      - postgres_data_prod:/var/lib/postgresql/data/
-    env_file:
-      - ./.env.prod.db
+
   nginx:
     build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
     ports:
-      - 1337:80
+      - "1337:80"
     depends_on:
       - web
+
+  db:
+    image: postgres:latest
+    restart: always
+    secrets:
+      - db-password
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    env_file:
+      - ./.env.prod.db
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    env_file:
+      - ./.env.prod.pg-admin
+    ports:
+      - "5050:80"
+    restart: always
 volumes:
   postgres_data_prod:
+  static_volume:
+secrets:
+  db-password:
+    file: db/db-password.txt
