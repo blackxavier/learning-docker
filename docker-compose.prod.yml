@@ -25,16 +25,14 @@ services:
       - web
 
   db:
-    image: postgres:latest
+    image: postgres:12
     restart: always
-    secrets:
-      - db-password
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-    env_file:
-      - ./.env.prod.db
+      - POSTGRES_USER=db_user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=hello_django_dev
     expose:
       - "5432"
     healthcheck:
@@ -51,9 +49,17 @@ services:
     ports:
       - "5050:80"
     restart: always
+
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9999:8080
 volumes:
   postgres_data_prod:
   static_volume:
-secrets:
-  db-password:
-    file: db/db-password.txt
+
+  # env_file:
+  #   - ./.env.prod.db
