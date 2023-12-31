@@ -1,4 +1,4 @@
-Django, Nginx, PostgreSQL, pgAdmin, Dozzle, and Vector Docker Compose Setup
+# Django, Nginx, PostgreSQL, pgAdmin, Dozzle, and Vector Docker Compose Setup
 This Docker Compose configuration sets up a multi-container environment for deploying a Django web application along with Nginx as a reverse proxy, PostgreSQL as the database, pgAdmin for database management, Dozzle for Docker logs visualization, and Vector for log shipping.
 
 Services:
