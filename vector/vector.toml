@@ -1,0 +1,25 @@
+[sources.nginx_docker]
+type = "docker_logs"
+include_containers = ["nginx", "web", "db", "pg_admin", "dozzle", "vector"]
+
+[sinks.better_stack]
+type = "http"
+method = "post"
+inputs = ["nginx_docker"]  # Corrected input name
+uri = "https://in.logs.betterstack.com/"
+encoding.codec = "json"
+auth.strategy = "bearer"
+auth.token = '375w9aQhih6YLsaUjPcKAxL7'
+
+[sources.docker_daemon]
+type = "syslog"
+include_units = ["docker.service"]
+
+[sinks.better_stack_docker_daemon]
+type = "http"
+method = "post"
+inputs = ["docker_daemon"]
+uri = "https://in.logs.betterstack.com/"
+encoding.codec = "json"
+auth.strategy = "bearer"
+auth.token = "375w9aQhih6YLsaUjPcKAxL7"
