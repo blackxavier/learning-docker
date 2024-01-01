@@ -41,7 +41,7 @@ This Docker Compose configuration sets up a multi-container environment for depl
    Volumes:
    postgres_data_prod: Volume for persisting PostgreSQL data.
    static_volume: Volume for storing static files.
-Current Issues
+### Current Issues
 1. Postgres DB keeps logging - role 'root' does not exist. Still figuring out how to take care of this. The db works regardless though.
 2. Shipping logs using vector still needs a bit of work.
 3. etc
