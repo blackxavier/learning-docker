@@ -16,7 +16,7 @@ services:
       - db
 
   nginx:
-    build: ./nginx
+    build: nginx/
     volumes:
       - static_volume:/home/app/web/staticfiles
     ports:
