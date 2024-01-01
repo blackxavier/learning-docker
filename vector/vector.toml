@@ -18,7 +18,6 @@ include_units = ["docker.service"]
 [sinks.better_stack_docker_daemon]
 type = "http"
 method = "post"
-mode = "info" 
 inputs = ["docker_daemon"]
 uri = "https://in.logs.betterstack.com/"
 encoding.codec = "json"
