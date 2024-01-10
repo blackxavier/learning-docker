@@ -1,54 +1,88 @@
-# Django, Nginx, PostgreSQL, pgAdmin, Dozzle, and Vector Docker Compose Setup
+# Docker Compose Overview
 
-This Docker Compose configuration sets up a multi-container environment for deploying a Django web application along with Nginx as a reverse proxy, PostgreSQL as the database, pgAdmin for database management, Dozzle for Docker logs visualization, and Vector for log shipping.
+This Docker Compose configuration sets up a multi-container environment for a Django web application, Nginx as a reverse proxy, PostgreSQL database, pgAdmin for database management, Dozzle for viewing Docker logs, Prometheus for monitoring, Node Exporter for exporting machine metrics, Nginx Exporter for exporting Nginx metrics, and Grafana for visualization of metrics.
 
 ## Services:
 
-1. web (Django Application)
-   Build: Uses a Dockerfile (Dockerfile.prod) to build the Django application.
-   Command: Starts the Gunicorn server to run the Django application.
-   Volumes: Mounts a volume for static files.
-   Expose: Exposes port 8000.
-   Environment: Reads environment variables from .env.prod.
-   Dependencies: Depends on the db service.
-2. nginx (Nginx Reverse Proxy)
-   Build: Uses the Nginx configuration from the ./nginx directory.
-   Volumes: Mounts a volume for static files.
-   Ports: Maps port 80 on the host to port 80 on the container.
-   Dependencies: Depends on the web service.
-3. db (PostgreSQL Database)
-   Image: Uses the PostgreSQL 12 image.
-   Restart: Always restarts the container.
-   Volumes: Mounts a volume for persisting PostgreSQL data.
-   Environment: Sets PostgreSQL user, password, and database.
-   Expose: Exposes port 5432.
-   Healthcheck: Checks if PostgreSQL is ready.
-4. pgadmin (pgAdmin for PostgreSQL)
-   Image: Uses the latest pgAdmin image.
-   Container Name: Sets the container name to pgadmin.
-   Environment: Reads environment variables from .env.prod.pg-admin.
-   Ports: Maps port 5050 on the host to port 80 on the container.
-   Restart: Always restarts the container.
-5. dozzle (Docker Logs Visualization)
-   Container Name: Sets the container name to dozzle.
-   Image: Uses the latest Dozzle image.
-   Volumes: Mounts the Docker socket for log access.
-   Ports: Maps port 9999 on the host to port 8080 on the container.
-6. vector (Log Shipping with Vector)
-   Image: Uses the Timber Vector image (timberio/vector:0.32.1-alpine).
-   Container Name: Sets the container name to vector.
-   Volumes: Mounts the Vector configuration file (vector.toml) and the Docker socket.
-   Dependencies: Depends on the nginx service.
-   Volumes:
-   postgres_data_prod: Volume for persisting PostgreSQL data.
-   static_volume: Volume for storing static files.
-<<<<<<< HEAD
+1. **Web Service (Django):**
 
-Current Issues
+   - Builds the Django web application.
+   - Uses Gunicorn as the application server.
+   - Exposes port 8000.
+   - Depends on the PostgreSQL database.
 
-=======
-### Current Issues
->>>>>>> 7c34d448740c44437e4815aae9e2dc3842c3fdd7
-1. Postgres DB keeps logging - role 'root' does not exist. Still figuring out how to take care of this. The db works regardless though.
-2. Shipping logs using vector still needs a bit of work.
-3. etc
+2. **Nginx:**
+
+   - Builds the Nginx service.
+   - Acts as a reverse proxy for the Django application.
+   - Serves static files.
+   - Exposes port 80.
+   - Depends on the web service.
+
+3. **PostgreSQL Database:**
+
+   - Uses the official PostgreSQL 12 image.
+   - Restarts always.
+   - Defines environment variables for PostgreSQL configuration.
+   - Exposes port 5432.
+   - Has a health check to ensure PostgreSQL is ready.
+
+4. **pgAdmin:**
+
+   - Manages PostgreSQL databases through a web interface.
+   - Uses the pgAdmin 4 image.
+   - Exposes port 5050.
+
+5. **Dozzle:**
+
+   - Displays Docker container logs in a web interface.
+   - Uses the Dozzle image.
+   - Exposes port 9999.
+   - Mounts the Docker socket for access.
+
+6. **Prometheus:**
+
+   - Monitors the Docker services.
+   - Uses the Prometheus image.
+   - Exposes port 9090.
+   - Mounts a configuration file.
+
+7. **Node Exporter:**
+
+   - Exports machine metrics for Prometheus.
+   - Uses the official Node Exporter image.
+   - Exposes port 9100.
+
+8. **Nginx Exporter:**
+
+   - Exports Nginx metrics for Prometheus.
+   - Uses the official Nginx Prometheus Exporter image.
+   - Exposes port 9913.
+   - Depends on the Nginx service.
+
+9. **Grafana:**
+   - Visualizes metrics collected by Prometheus.
+   - Uses the Grafana image.
+   - Exposes port 3000.
+   - Mounts configuration files.
+
+## Volumes:
+
+- **postgres_data_prod:** Volume for persisting PostgreSQL data.
+- **static_volume:** Volume for serving static files.
+
+### Usage:
+
+1. Run the Docker Compose file after cloning the repo using:
+   ```bash
+   docker-compose - f docker-compose.prod.yml up --build
+   ```
+2. Access services:
+   - Web Application: [http://localhost:8000](http://localhost:8000)
+   - Nginx: [http://localhost:80](http://localhost:80)
+   - pgAdmin: [http://localhost:5050](http://localhost:5050)
+   - Dozzle: [http://localhost:9999](http://localhost:9999)
+   - Prometheus: [http://localhost:9090](http://localhost:9090)
+   - Grafana: [http://localhost:3000](http://localhost:3000) (Default login: admin/admin)
+
+**Note:** Make sure to customize environment variables and configurations based on your application needs.

@@ -90,14 +90,6 @@ services:
     ports:
       - "3000:3000"
 
-  # vector:
-  #   image: timberio/vector:0.32.1-alpine
-  #   container_name: vector
-  #   volumes:
-  #     - .\vector\vector.toml:/etc/vector/vector.toml:ro
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   depends_on:
-  #     - nginx
 volumes:
   postgres_data_prod:
   static_volume:
