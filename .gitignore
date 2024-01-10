@@ -86,7 +86,8 @@ docs/_build/
 # PyBuilder
 .pybuilder/
 target/
-
+.env.prod.pg-admin
+.env.dev
 # Jupyter Notebook
 .ipynb_checkpoints
 
