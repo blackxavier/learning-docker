@@ -1,4 +1,5 @@
 # Django, Nginx, PostgreSQL, pgAdmin, Dozzle, and Vector Docker Compose Setup
+
 This Docker Compose configuration sets up a multi-container environment for deploying a Django web application along with Nginx as a reverse proxy, PostgreSQL as the database, pgAdmin for database management, Dozzle for Docker logs visualization, and Vector for log shipping.
 
 ## Services:
@@ -41,7 +42,9 @@ This Docker Compose configuration sets up a multi-container environment for depl
    Volumes:
    postgres_data_prod: Volume for persisting PostgreSQL data.
    static_volume: Volume for storing static files.
+
 Current Issues
+
 1. Postgres DB keeps logging - role 'root' does not exist. Still figuring out how to take care of this. The db works regardless though.
 2. Shipping logs using vector still needs a bit of work.
 3. etc
