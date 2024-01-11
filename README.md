@@ -86,3 +86,4 @@ This Docker Compose configuration sets up a multi-container environment for a Dj
    - Grafana: [http://localhost:3000](http://localhost:3000) (Default login: admin/admin)
 
 **Note:** Make sure to customize environment variables and configurations based on your application needs.
+**Things to work on:** Grafana setup not fully completed yet.
