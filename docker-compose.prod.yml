@@ -69,26 +69,26 @@ services:
 
   node-exporter:
     image: prom/node-exporter:v1.2.2
-    ports:
-      - "9100:9100"
+    expose:
+      - "9100"
 
   nginx-exporter:
     image: nginx/nginx-prometheus-exporter
     environment:
       - NGINX_SCRAPE_URI=http://nginx:80/metrics
-    ports:
-      - "9913:9913"
+    expose:
+      - "9913"
     depends_on:
       - nginx
 
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    volumes:
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/provisioning/:/etc/grafana/provisioning/
-    ports:
-      - "3000:3000"
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: grafana
+  #   volumes:
+  #     - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+  #     - ./grafana/provisioning/:/etc/grafana/provisioning/
+  #   ports:
+  #     - "3000:3000"
 
   # vector:
   #   image: timberio/vector:0.32.1-alpine
