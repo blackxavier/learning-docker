@@ -94,7 +94,7 @@ This project uses Docker Compose to manage multiple services. It includes the fo
 
 Feel free to explore each service in detail. Happy coding!
 
-Current Issues
+## Current Issues
 
 1. Postgres DB keeps logging - role 'root' does not exist. Still figuring out how to take care of this. The db works regardless though.
 2. Shipping logs using vector still needs a bit of work.
