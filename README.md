@@ -1,50 +1,102 @@
-# Django, Nginx, PostgreSQL, pgAdmin, Dozzle, and Vector Docker Compose Setup
+# Docker Compose Project
 
-This Docker Compose configuration sets up a multi-container environment for deploying a Django web application along with Nginx as a reverse proxy, PostgreSQL as the database, pgAdmin for database management, Dozzle for Docker logs visualization, and Vector for log shipping.
+This project uses Docker Compose to manage multiple services. It includes the following services:
 
-## Services:
+## Web Service (Django and Nginx)
 
-1. web (Django Application)
-   Build: Uses a Dockerfile (Dockerfile.prod) to build the Django application.
-   Command: Starts the Gunicorn server to run the Django application.
-   Volumes: Mounts a volume for static files.
-   Expose: Exposes port 8000.
-   Environment: Reads environment variables from .env.prod.
-   Dependencies: Depends on the db service.
-2. nginx (Nginx Reverse Proxy)
-   Build: Uses the Nginx configuration from the ./nginx directory.
-   Volumes: Mounts a volume for static files.
-   Ports: Maps port 80 on the host to port 80 on the container.
-   Dependencies: Depends on the web service.
-3. db (PostgreSQL Database)
-   Image: Uses the PostgreSQL 12 image.
-   Restart: Always restarts the container.
-   Volumes: Mounts a volume for persisting PostgreSQL data.
-   Environment: Sets PostgreSQL user, password, and database.
-   Expose: Exposes port 5432.
-   Healthcheck: Checks if PostgreSQL is ready.
-4. pgadmin (pgAdmin for PostgreSQL)
-   Image: Uses the latest pgAdmin image.
-   Container Name: Sets the container name to pgadmin.
-   Environment: Reads environment variables from .env.prod.pg-admin.
-   Ports: Maps port 5050 on the host to port 80 on the container.
-   Restart: Always restarts the container.
-5. dozzle (Docker Logs Visualization)
-   Container Name: Sets the container name to dozzle.
-   Image: Uses the latest Dozzle image.
-   Volumes: Mounts the Docker socket for log access.
-   Ports: Maps port 9999 on the host to port 8080 on the container.
-6. vector (Log Shipping with Vector)
-   Image: Uses the Timber Vector image (timberio/vector:0.32.1-alpine).
-   Container Name: Sets the container name to vector.
-   Volumes: Mounts the Vector configuration file (vector.toml) and the Docker socket.
-   Dependencies: Depends on the nginx service.
-   Volumes:
-   postgres_data_prod: Volume for persisting PostgreSQL data.
-   static_volume: Volume for storing static files.
+- **Service Name:** `web`
+- **Description:** Django web service with Nginx as a reverse proxy and static files server.
+- **Usage:** Exposes Django application on port 8000.
+
+## PostgreSQL Database
+
+- **Service Name:** `db`
+- **Description:** PostgreSQL database service.
+- **Usage:** Exposes PostgreSQL on port 5432.
+
+## pgAdmin (PostgreSQL Management Tool)
+
+- **Service Name:** `pgadmin`
+- **Description:** pgAdmin service for managing PostgreSQL databases.
+- **Usage:** Exposes pgAdmin on port 5050.
+
+## Dozzle (Docker Container Logs Viewer)
+
+- **Service Name:** `dozzle`
+- **Description:** Container logs viewer for monitoring Docker containers.
+- **Usage:** Exposes Dozzle on port 9999.
+
+## Vector (Logs Shipper)
+
+- **Service Name:** `vector`
+- **Description:** Vector service for shipping logs to BetterStack platform.
+- **Usage:** Exposes Vector for log shipping.
+
+## MongoDB Database
+
+- **Service Name:** `mongodb`
+- **Description:** MongoDB database service.
+- **Usage:** Exposes MongoDB on port 27017.
+
+## MongoDB Express (MongoDB Web-based UI)
+
+- **Service Name:** `mongodb-express`
+- **Description:** Web-based UI for MongoDB management.
+- **Usage:** Exposes MongoDB Express on port 8081.
+
+## Node App
+
+- **Service Name:** `node-app`
+- **Description:** Node.js application with MongoDB connection.
+- **Usage:** Exposes Node.js application on port 3000.
+
+## Prometheus (Monitoring and Alerting Toolkit)
+
+- **Service Name:** `prometheus`
+- **Description:** Prometheus service for monitoring.
+- **Usage:** Exposes Prometheus on port 9090.
+
+## Node Exporter (Prometheus Exporter)
+
+- **Service Name:** `node-exporter`
+- **Description:** Prometheus exporter for collecting hardware and OS metrics.
+- **Usage:** Exposes Node Exporter on port 9100.
+
+## Nginx Exporter (Prometheus Exporter for Nginx)
+
+- **Service Name:** `nginx-exporter`
+- **Description:** Prometheus exporter for Nginx metrics.
+- **Usage:** Exposes Nginx Exporter on port 9913.
+
+## Grafana (Open-source Platform for Monitoring and Observability)
+
+- **Service Name:** `grafana`
+- **Description:** Grafana service for visualization and monitoring.
+- **Usage:** Exposes Grafana on port 3000.
+
+## Additional Services
+
+### MongoDB Services
+
+- **Services:** `mongodb`, `mongodb-express`, `node-app`
+- **Description:** MongoDB services for a Node.js application.
+
+### Prometheus Services
+
+- **Services:** `prometheus`, `node-exporter`, `nginx-exporter`
+- **Description:** Prometheus and related exporters for monitoring.
+
+## Usage
+
+1. Clone the repository.
+2. Copy `.env.example` to `.env` and adjust the configurations.
+3. Run `docker-compose -f docker-compose.prod.yml up -d` to start the services.
+
+Feel free to explore each service in detail. Happy coding!
 
 Current Issues
 
 1. Postgres DB keeps logging - role 'root' does not exist. Still figuring out how to take care of this. The db works regardless though.
 2. Shipping logs using vector still needs a bit of work.
-3. etc
+3. Postgres has a new error. Though at the `LOG` severity - invalid length of statup packet. The internet says it has to do with connections to the DB but only the django service id currently connected.
+4. Mongodb express keeps trying to connect to mongo before mongo is fully operational even with the `depends_on` attribute
