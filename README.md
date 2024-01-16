@@ -1,89 +1,103 @@
-# Docker Compose Overview
+# Docker Compose Project
 
-This Docker Compose configuration sets up a multi-container environment for a Django web application, Nginx as a reverse proxy, PostgreSQL database, pgAdmin for database management, Dozzle for viewing Docker logs, Prometheus for monitoring, Node Exporter for exporting machine metrics, Nginx Exporter for exporting Nginx metrics, and Grafana for visualization of metrics.
+This project uses Docker Compose to manage multiple services. It includes the following services:
 
-## Services:
+## Web Service (Django and Nginx)
 
-1. **Web Service (Django):**
+- **Service Name:** `web`
+- **Description:** Django web service with Nginx as a reverse proxy and static files server.
+- **Usage:** Exposes Django application on port 8000.
 
-   - Builds the Django web application.
-   - Uses Gunicorn as the application server.
-   - Exposes port 8000.
-   - Depends on the PostgreSQL database.
+## PostgreSQL Database
 
-2. **Nginx:**
+- **Service Name:** `db`
+- **Description:** PostgreSQL database service.
+- **Usage:** Exposes PostgreSQL on port 5432.
 
-   - Builds the Nginx service.
-   - Acts as a reverse proxy for the Django application.
-   - Serves static files.
-   - Exposes port 80.
-   - Depends on the web service.
+## pgAdmin (PostgreSQL Management Tool)
 
-3. **PostgreSQL Database:**
+- **Service Name:** `pgadmin`
+- **Description:** pgAdmin service for managing PostgreSQL databases.
+- **Usage:** Exposes pgAdmin on port 5050.
 
-   - Uses the official PostgreSQL 12 image.
-   - Restarts always.
-   - Defines environment variables for PostgreSQL configuration.
-   - Exposes port 5432.
-   - Has a health check to ensure PostgreSQL is ready.
+## Dozzle (Docker Container Logs Viewer)
 
-4. **pgAdmin:**
+- **Service Name:** `dozzle`
+- **Description:** Container logs viewer for monitoring Docker containers.
+- **Usage:** Exposes Dozzle on port 9999.
 
-   - Manages PostgreSQL databases through a web interface.
-   - Uses the pgAdmin 4 image.
-   - Exposes port 5050.
+## Vector (Logs Shipper)
 
-5. **Dozzle:**
+- **Service Name:** `vector`
+- **Description:** Vector service for shipping logs to BetterStack platform.
+- **Usage:** Exposes Vector for log shipping.
 
-   - Displays Docker container logs in a web interface.
-   - Uses the Dozzle image.
-   - Exposes port 9999.
-   - Mounts the Docker socket for access.
+## MongoDB Database
 
-6. **Prometheus:**
+- **Service Name:** `mongodb`
+- **Description:** MongoDB database service.
+- **Usage:** Exposes MongoDB on port 27017.
 
-   - Monitors the Docker services.
-   - Uses the Prometheus image.
-   - Exposes port 9090.
-   - Mounts a configuration file.
+## MongoDB Express (MongoDB Web-based UI)
 
-7. **Node Exporter:**
+- **Service Name:** `mongodb-express`
+- **Description:** Web-based UI for MongoDB management.
+- **Usage:** Exposes MongoDB Express on port 8081.
 
-   - Exports machine metrics for Prometheus.
-   - Uses the official Node Exporter image.
-   - Exposes port 9100.
+## Node App
 
-8. **Nginx Exporter:**
+- **Service Name:** `node-app`
+- **Description:** Node.js application with MongoDB connection.
+- **Usage:** Exposes Node.js application on port 3000.
 
-   - Exports Nginx metrics for Prometheus.
-   - Uses the official Nginx Prometheus Exporter image.
-   - Exposes port 9913.
-   - Depends on the Nginx service.
+## Prometheus (Monitoring and Alerting Toolkit)
 
-9. **Grafana:**
-   - Visualizes metrics collected by Prometheus.
-   - Uses the Grafana image.
-   - Exposes port 3000.
-   - Mounts configuration files.
+- **Service Name:** `prometheus`
+- **Description:** Prometheus service for monitoring.
+- **Usage:** Exposes Prometheus on port 9090.
 
-## Volumes:
+## Node Exporter (Prometheus Exporter)
 
-- **postgres_data_prod:** Volume for persisting PostgreSQL data.
-- **static_volume:** Volume for serving static files.
+- **Service Name:** `node-exporter`
+- **Description:** Prometheus exporter for collecting hardware and OS metrics.
+- **Usage:** Exposes Node Exporter on port 9100.
 
-### Usage:
+## Nginx Exporter (Prometheus Exporter for Nginx)
 
-1. Run the Docker Compose file after cloning the repo using:
-   ```bash
-   docker-compose - f docker-compose.prod.yml up --build
-   ```
-2. Access services:
-   - Web Application: [http://localhost:8000](http://localhost:8000)
-   - Nginx: [http://localhost:80](http://localhost:80)
-   - pgAdmin: [http://localhost:5050](http://localhost:5050)
-   - Dozzle: [http://localhost:9999](http://localhost:9999)
-   - Prometheus: [http://localhost:9090](http://localhost:9090)
-   - Grafana: [http://localhost:3000](http://localhost:3000) (Default login: admin/admin)
+- **Service Name:** `nginx-exporter`
+- **Description:** Prometheus exporter for Nginx metrics.
+- **Usage:** Exposes Nginx Exporter on port 9913.
 
-**Note:** Make sure to customize environment variables and configurations based on your application needs.
-**Things to work on:** Grafana setup not fully completed yet.
+## Grafana (Open-source Platform for Monitoring and Observability)
+
+- **Service Name:** `grafana`
+- **Description:** Grafana service for visualization and monitoring.
+- **Usage:** Exposes Grafana on port 3000.
+
+## Additional Services
+
+### MongoDB Services
+
+- **Services:** `mongodb`, `mongodb-express`, `node-app`
+- **Description:** MongoDB services for a Node.js application.
+
+### Prometheus Services
+
+- **Services:** `prometheus`, `node-exporter`, `nginx-exporter`
+- **Description:** Prometheus and related exporters for monitoring.
+
+## Usage
+
+1. Clone the repository.
+2. Copy `.env.example` to `.env` and adjust the configurations.
+3. Run `docker-compose -f docker-compose.prod.yml up -d` to start the services.
+
+Feel free to explore each service in detail. Happy coding!
+
+Current Issues
+
+1. Postgres DB keeps logging - role 'root' does not exist. Still figuring out how to take care of this. The db works regardless though.
+2. Shipping logs using vector still needs a bit of work.
+3. Postgres has a new error. Though at the `LOG` severity - invalid length of statup packet. The internet says it has to do with connections to the DB but only the django service id currently connected.
+4. Mongodb express keeps trying to connect to mongo before mongo is fully operational even with the `depends_on` attribute
+5. Graphana is a pain.
