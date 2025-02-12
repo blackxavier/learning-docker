@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chiefbuilder-cm
+  namespace: chiefbuilder
+data:
+  DJANGO_SETTINGS_MODULE: "hello_django.settings"
+  SQL_ENGINE: "django.db.backends.postgresql"
+  SQL_DATABASE: "hello_django_prod"
+  SQL_USER: "db_user"
+  SQL_HOST: "db"
+  SQL_PORT: "5432"
+  DJANGO_ALLOWED_HOSTS: "*"
+  DEBUG: "False"
+  DATABASE: "postgres"
+  POSTGRES_DB: hello_django_prod

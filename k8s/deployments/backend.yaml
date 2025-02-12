@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chiefbuilder-backend-deployment
+  namespace: chiefbuilder
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+      - name: django
+        image: app-web
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: chiefbuilder-cm
+        - secretRef:
+            name: chiefbuilder-secret
+        volumeMounts:
+        - name: static-volume
+          mountPath: /home/app/web/staticfiles
+      volumes:
+      - name: static-volume
+        emptyDir: {}

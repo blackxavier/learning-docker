@@ -83,43 +83,35 @@ services:
     depends_on:
       - nginx
 
-  mongodb:
-    image: mongo
-    ports:
-      - "27017:27017"
-    env_file:
-      - .env.mongo
-    restart: always
+  # mongodb:
+  #   image: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   env_file:
+  #     - .env.mongo
+  #   restart: always
 
-  mongodb-express:
-    image: mongo-express
-    ports:
-      - "8081:8081"
-    restart: always
-    env_file:
-      - .env.mongo
-    depends_on:
-      - mongodb
+  # mongodb-express:
+  #   image: mongo-express
+  #   ports:
+  #     - "8081:8081"
+  #   restart: always
+  #   env_file:
+  #     - .env.mongo
+  #   depends_on:
+  #     - mongodb
 
-  node-app:
-    build:
-      context: node-mongo/
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    env_file:
-      - ./node-mongo/.env.server
-    depends_on:
-      - mongodb
-
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   container_name: grafana
-  #   volumes:
-  #     - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-  #     - ./grafana/provisioning/:/etc/grafana/provisioning/
+  # node-app:
+  #   build:
+  #     context: node-mongo/
+  #     dockerfile: Dockerfile
   #   ports:
   #     - "3000:3000"
+  #   env_file:
+  #     - ./node-mongo/.env.server
+  #   depends_on:
+  #     - mongodb
+
 
 volumes:
   postgres_data_prod:

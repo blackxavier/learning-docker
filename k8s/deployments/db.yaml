@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chiefbuilder-postgres-deployment
+  namespace: chiefbuilder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:12
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: "db_user"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: chiefbuilder-secret
+              key: SQL_PASSWORD
+        - name: POSTGRES_DB
+          value: "hello_django_prod"
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-data
+        emptyDir: {}
