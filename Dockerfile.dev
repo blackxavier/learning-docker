@@ -60,9 +60,9 @@ RUN pip install --no-cache /wheels/*
 
 
 # copy entrypoint.sh
-COPY /hello_django/entrypoint/entrypoint.prod.sh .
+COPY /hello_django/entrypoint.prod.sh .
 RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.prod.sh
-RUN chmod +x /home/app/web/entrypoint.prod.sh
+RUN chmod +x $APP_HOME/entrypoint.prod.sh
 # chown all the files to the app user
 RUN chown -R app:app $APP_HOME
 
