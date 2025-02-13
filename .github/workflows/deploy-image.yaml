@@ -25,7 +25,7 @@ jobs:
       - name: Build and Push Django Image
         uses: docker/build-push-action@v5
         with:
-          context: ./django
+          context: ./hello_django
           file: ./hello_django/Dockerfile
           cache-from: type=gha
           cache-to: type=gha,mode=max
