@@ -26,10 +26,8 @@ RUN apt-get update && apt-get install -y netcat && \
 RUN pip install --upgrade pip
 RUN pip install flake8==6.0.0
 COPY ./requirements.txt .
-RUN pip install -r requirements.txt
 
-# install python dependencies
-COPY ./requirements.txt .
+
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 #########
