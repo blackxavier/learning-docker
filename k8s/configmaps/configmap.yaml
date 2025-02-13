@@ -14,3 +14,4 @@ data:
   DEBUG: "False"
   DATABASE: "postgres"
   POSTGRES_DB: hello_django_prod
+  PGADMIN_CONFIG_LOGIN_BANNER: "Authorisedusers"

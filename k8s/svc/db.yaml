@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: chiefbuilder-postgres-service
-  namespace: chiefbuilde
+  namespace: chiefbuilder
 spec:
   selector:
     app: postgres
