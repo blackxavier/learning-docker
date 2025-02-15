@@ -2,16 +2,14 @@ version: "3.8"
 
 services:
   web:
-    build:
-      context: .
-      dockerfile: hello_django/Dockerfile.dev
+    build: backend/
     command: gunicorn hello_django.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/home/app/web/staticfiles
     expose:
       - "8000"
     env_file:
-      - ./.env.prod
+      - ./backend/env/.env.prod
     depends_on:
       - db
 
@@ -45,7 +43,7 @@ services:
     container_name: pgadmin
     image: dpage/pgadmin4:latest
     env_file:
-      - ./.env.prod.pg-admin
+      - ./backend/env/.env.prod.pg-admin
     environment:
       - PGADMIN_CONFIG_LOGIN_BANNER="Authorisedusers"
     ports:
