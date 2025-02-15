@@ -49,6 +49,48 @@ This project uses Docker Compose to manage multiple services for a Django applic
 - **Description:** Grafana service for visualization and monitoring.
 - **Usage:** Exposes Grafana on port 3000.
 
+
+## Usage
+
+1. **Copy the Environment File:**
+    - Copy `.env.example` to `.env` and adjust the configurations as needed.
+
+2. **Run Services:**
+    - Start the services using Docker Compose:
+      ```sh
+      docker-compose up -d
+      ```
+
+3. **Access Services:**
+    - Django Application: [http://localhost:8000](http://localhost:8000)
+    - pgAdmin: [http://localhost:5050](http://localhost:5050)
+    - Dozzle: [http://localhost:9999](http://localhost:9999)
+    - Prometheus: [http://localhost:9090](http://localhost:9090)
+    - Grafana: [http://localhost:3000](http://localhost:3000)
+
+## Current Issues
+
+- **Postgres DB Logging Issue:**
+  - The PostgreSQL database logs an error: "role 'root' does not exist". The database works regardless, but this issue needs to be resolved.
+
+- **Vector Log Shipping:**
+  - Shipping logs using Vector still needs a bit of work to ensure all logs are correctly shipped to BetterStack.
+
+- **Postgres Startup Packet Error:**
+  - PostgreSQL logs an error: "invalid length of startup packet". This is related to connections to the database, but only the Django service is currently connected.
+
+- **MongoDB Express Connection Issue:**
+  - MongoDB Express tries to connect to MongoDB before MongoDB is fully operational, even with the `depends_on` attribute.
+
+- **Grafana Configuration:**
+  - Grafana setup and configuration need further attention to ensure it works correctly with the provided datasources.
+
+## Additional Notes
+
+- Ensure that Docker and Docker Compose are installed on your system.
+- Adjust the environment variables in the `.env` file to match your setup.
+- The `docker-compose.prod.yml` file is configured for production use. For development, use the `docker-compose.yml` file.
+- Feel free to explore each service in detail. Happy coding!
 ## Usage
 
 GitHub Copilot
