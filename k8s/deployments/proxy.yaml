@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: app-nginx
+        image: chiefbuilder/nginx-proxy
         ports:
         - containerPort: 80
         volumeMounts:
@@ -29,3 +30,4 @@ spec:
       - name: nginx-config
         configMap:
           name: nginx-config
+
