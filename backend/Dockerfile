@@ -23,8 +23,8 @@ COPY . /app/
 # Debug: print files and working dir
 RUN find . -type f && pwd && ls -ltr
 # Fix Windows line endings and set executable permission on the entrypoint script
-RUN sed -i 's/\r//g' backend/entrypoint/entrypoint.sh && \
-    chmod +x backend/entrypoint/entrypoint.sh
+RUN sed -i 's/\r//g' entrypoint/entrypoint.sh && \
+    chmod +x entrypoint/entrypoint.sh
 
 # Set the entrypoint
 ENTRYPOINT ["/app/backend/entrypoint/entrypoint.sh"]
