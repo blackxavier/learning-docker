@@ -20,8 +20,8 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY . /app/
 
 # Fix Windows line endings and set executable permission on the entrypoint script
-RUN sed -i 's/\r//g' /app/backend/entrypoint/entrypoint.sh && \
-    chmod +x /app/backend/entrypoint/entrypoint.sh
+RUN sed -i 's/\r//g' backend/entrypoint/entrypoint.sh && \
+    chmod +x backend/entrypoint/entrypoint.sh
 
 # Set the entrypoint
 ENTRYPOINT ["/app/backend/entrypoint/entrypoint.sh"]
