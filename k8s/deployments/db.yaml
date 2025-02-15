@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chiefbuilder-postgres-deployment
+  name: chiefbuilder-db-deployment
   namespace: chiefbuilder
 spec:
   replicas: 1

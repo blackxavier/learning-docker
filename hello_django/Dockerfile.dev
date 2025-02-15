@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y netcat && \
 # install python dependencies
 RUN pip install --upgrade pip
 RUN pip install flake8==6.0.0
-COPY ./requirements.txt  /usr/src/app/
+COPY ./hello_django/requirements.txt  /usr/src/app/
 
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
@@ -62,7 +62,7 @@ RUN chown -R app:app $APP_HOME
 COPY . .
 
 # Optionally, copy the entrypoint file to a dedicated location in the container
-COPY ./entrypoint/entrypoint.sh $APP_HOME/entrypoint.sh
+COPY ./hello_django/entrypoint/entrypoint.sh $APP_HOME/entrypoint.sh
 
 # Debug: print files and working dir
 RUN find . -type f && pwd
