@@ -15,10 +15,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends netcat
 # Copy requirements file and install dependencies
 COPY requirements.txt /app/requirements.txt
 RUN pip install --upgrade pip && pip install -r requirements.txt
+# install dependencies, etc.
+RUN apt-get update && apt-get install -y tree && tree .
 
 # Copy project files
 COPY . /app/
-
+# Debug: print files and working dir
+RUN find . -type f && pwd && ls -ltr
 # Fix Windows line endings and set executable permission on the entrypoint script
 RUN sed -i 's/\r//g' backend/entrypoint/entrypoint.sh && \
     chmod +x backend/entrypoint/entrypoint.sh
