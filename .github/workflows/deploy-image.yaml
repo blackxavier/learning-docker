@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./hello_django
-          file: ./Dockerfile.dev
+          file: ./hello_django/Dockerfile.dev
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
