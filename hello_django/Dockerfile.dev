@@ -57,20 +57,22 @@ COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache /wheels/*
 RUN apt-get update && apt-get install -y tree && tree .
-
-# copy entrypoint.sh into the correct destination in the container
-# COPY ./hello_django/entrypoint/entrypoint.sh $APP_HOME/entrypoint.sh
-# RUN sed -i 's/\r$//g' $APP_HOME/entrypoint.sh
-# RUN chmod +x $APP_HOME/entrypoint.sh
-# chown all the files to the app user
 RUN chown -R app:app $APP_HOME
 
-# copy project
 COPY . .
+
+# Optionally, copy the entrypoint file to a dedicated location in the container
+COPY ./entrypoint/entrypoint.sh $APP_HOME/entrypoint.sh
+
+# Debug: print files and working dir
 RUN find . -type f && pwd
-RUN sed -i 's/\r$//g' $APP_HOME/hello_django/entrypoint/entrypoint.sh
-RUN chmod +x  $APP_HOME/hello_django/entrypoint/entrypoint.sh
+
+# Fix Windows line endings and set executable permission on the copied entrypoint
+RUN sed -i 's/\r//g' $APP_HOME/entrypoint.sh
+RUN chmod +x $APP_HOME/entrypoint.sh
+
 # change to the app user
 USER app
-# run entrypoint.sh
+
+# run entrypoint.sh from the canonical location
 ENTRYPOINT ["/home/app/web/entrypoint.sh"]
